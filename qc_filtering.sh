@@ -9,23 +9,23 @@ fi
 # qc_filtered="qc_filtered"
 
 # input .fastq/.fastq.gz
-# QC the data from genome sequencer: nanoplot
+echo "QC the raw data from genome sequencer by nanoplot..."
 # mamba create -n nanoplot -c nanoplot
 mamba activate nanoplot
-NanoPlot -t $(nproc) --fastq sample/${SAMPLE}.fastq.gz --outdir qc_raw/${SAMPLE}
+NanoPlot -t $(nproc) --fastq "sample/${SAMPLE}.fastq.gz" --outdir "qc_raw/${SAMPLE}/"
 mamba deactivate
 
-# quality filtering and trimming: chopper for Q10 & >=1000bp
+echo "Quality filtering and trimming: chopper for Q10 & >=1000bp..."
 # recommend gunzip .fastq.gz for faster processing
 # mamba create -n chopper -c chopper
 mamba activate chopper
-gunzip -c sample/${SAMPLE}.fastq.gz | chopper -q 10 -l 1000 | \
-gzip > sample/${SAMPLE}_filtered.fastq.gz
+gunzip -c "sample/${SAMPLE}.fastq.gz" | chopper -q 10 -l 1000 | \
+gzip > "sample/${SAMPLE}_filtered.fastq.gz"
 mamba deactivate
 
-# QC filtered sequence by nanoplot
+echo "QC filtered sequences by nanoplot..."
 mamba activate nanoplot
-NanoPlot -t $(nproc) --fastq sample/${SAMPLE}_filtered.fastq.gz --outdir qc_filtered/${SAMPLE}
+NanoPlot -t $(nproc) --fastq "sample/${SAMPLE}_filtered.fastq.gz" --outdir "qc_filtered/${SAMPLE}/"
 mamba deactivate
 
 """

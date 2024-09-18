@@ -3,9 +3,9 @@
 if [ ! -d "binning_qc" ] ; then
     mkdir -p binning_qc
 fi
-mkdir binning_qc/${SAMPLE}
+mkdir "binning_qc/${SAMPLE}"
 
-# qc bin by checkm
+echo "QC binned MAGs by Checkm..."
 # installation through conda
 # mamba create -n checkm python=3.9
 mamba activate checkm
@@ -25,6 +25,6 @@ decompress into
 # checkm data setRoot <checkm_data_dir>
 
 # checkm usage
-checkm lineage_wf -t $(nproc) -x fasta binning/$SAMPLE/bins binning_qc/$SAMPLE
+checkm lineage_wf -t $(nproc) -x fasta "binning/${SAMPLE}/bins" "binning_qc/${SAMPLE}"
 
 mamba deactivate

@@ -3,29 +3,31 @@
 if [ ! -d "binning" ] ; then
     mkdir -p binning
 fi
-mkdir binning/${SAMPLE}
+mkdir "binning/${SAMPLE}"
 
-# binning by MetCoAG
+echo "MetaCoAG Binning for MAGs processing..."
+
+# binning by MetaCoAG
 """requirement:
 1. flye assembly (from assembly.sh)
 2. abundance.tsv by CoverM
 """
 # mamba create -n coverm coverm
 mamba activate coverm
-coverm contig --single dehost/${SAMPLE}_dehost.fastq.gz \ 
--r assembly/${SAMPLE}/assembly.fasta \ 
--o binning/${SAMPLE}/abundance.tsv -t $(nproc)
+coverm contig --single "dehost/${SAMPLE}_dehost.fastq.gz" \ 
+-r "assembly/${SAMPLE}/assembly.fasta" \ 
+-o "binning/${SAMPLE}/abundance.tsv" -t $(nproc)
 # remove the header of the file
-sed -i '1d' binning/${SAMPLE}/abundance.tsv	
+sed -i '1d' "binning/${SAMPLE}/abundance.tsv"	
 mamba deactivate
 
 # mamba create -n metacoag -c bioconda metacoag
 mamba activate metacoag
 metacoag --assembler flye --nthreads $(nproc) \ 
---graph assembly/${SAMPLE}/assembly_graph.gfa \ 
---contigs assembly/${SAMPLE}/assembly.fasta \ 
---paths assembly/${SAMPLE}/assembly_graph.txt \ 
---abundance binning/${SAMPLE}/abundance.tsv --output binning/${SAMPLE}
+--graph "assembly/${SAMPLE}/assembly_graph.gfa" \ 
+--contigs "assembly/${SAMPLE}/assembly.fasta" \ 
+--paths "assembly/${SAMPLE}/assembly_graph.txt" \ 
+--abundance "binning/${SAMPLE}/abundance.tsv" --output "binning/${SAMPLE}"
 
 mamba deactivate
 

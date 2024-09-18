@@ -1,0 +1,18 @@
+# conda env create -f environment.yml
+name: nanopore_mNGS
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python>=3.9
+  - nanoplot
+  - chopper
+  - minimap2
+  - samtools
+  - taxor
+  - flye
+  - coverm
+  - metacoag
+  - checkm
+  - sourmash
+  - abricate

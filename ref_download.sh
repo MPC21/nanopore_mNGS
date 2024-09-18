@@ -1,7 +1,7 @@
 #!/usr/local/bin/env bash
 
 # download human reference genome (T2T-CHM13v2.0) for host depletion
-mkdir -p "reference" && cd reference
+mkdir -p "database" && cd database
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/914/755/GCF_009914755.1_T2T-CHM13v2.0/GCF_009914755.1_T2T-CHM13v2.0_genomic.fna.gz
 human_reference="GCF_009914755.1_T2T-CHM13v2_genomic.fna.gz"
 
@@ -49,9 +49,10 @@ git clone https://github.com/sourmash-bio/database-examples.git
 # build a 'fromfile' for sourmash to use
 # ./fasta-to-fromfile.py <reference.fasta/fa/fna.gz> -o build.csv
 or
-./genbank-to-fromfile.py file/* -o build.csv -S assembly_summary.txt
+# ./genbank-to-fromfile.py file/* -o build.csv -S assembly_summary.txt
 # missing protein files: .error.report.txt
 # Names for the genomes are taken from the NCBI assembly_summary.txt
 
 # build the signature database using sourmash
 sourmash sketch fromfile build.csv -o ../RefSeq.zip -p dna
+sourmash sketch fromfile build.csv -o ../genbank.zip -p dna -p protein --ignore-missing

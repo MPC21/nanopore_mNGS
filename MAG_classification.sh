@@ -3,18 +3,17 @@
 if [ ! -d "MAGs" ] ; then
     mkdir -p MAGs
 fi
-mkdir MAGs/$SAMPLE
+mkdir "MAGs/${SAMPLE}"
 
-binning/$SAMPLE
-# MAG classification by sourmash
+echo "MAG classification by sourmash against Genbank database..."
 mamba activate sourmash
 
 for bin in binning/${SAMPLE}/bins/*.fasta; do 
     # get signatures from binned contigs
-    sourmash sketch dna -p scaled=1000,k=31,abund --name-from-first ${bin} -o MAGs/${SAMPLE}/${bin}.sig
+    sourmash sketch dna -p scaled=1000,k=31,abund --name-from-first ${bin} -o "MAGs/${SAMPLE}/${bin}.sig"
     # sourmash sketch dna -p k=31,abund SRR8859675*.gz -o SRR8859675.sig.gz --name SRR8859675
     # find matching genome 
-    sourmash gather MAGs/${SAMPLE}/${bin}.sig reference/refseq/RefSeq.zip -o MAGs/${SAMPLE}/${bin}.csv
+    sourmash gather "MAGs/${SAMPLE}/${bin}.sig" database/genbank/genbank.zip -o "MAGs/${SAMPLE}/${bin}.csv"
 done
 
 mamba deactivate
